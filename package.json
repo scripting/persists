@@ -1,0 +1,18 @@
+{
+	"name": "persists",
+	"description": "Persistence for JavaScript objects, using a folder as storage between runs of a client app.",
+	"author": "Dave Winer <dave@scripting.com>",
+	"license": "MIT",
+	"main": "persists.js",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/scripting/persists.git"
+		},
+	"files": [
+		"persists.js"
+		],
+	"version": "0.4.0",
+	"dependencies" : {
+		"daveutils": "*"
+		} 
+	}
