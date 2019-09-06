@@ -1,4 +1,4 @@
-var myProductName = "persists", myVersion = "0.4.2";  
+var myProductName = "persists", myVersion = "0.4.3";  
 
 /*  The MIT License (MIT)
 	Copyright (c) 2014-2019 Dave Winer
@@ -27,39 +27,47 @@ module.exports = createSharedObject;
 const utils = require ("daveutils");
 const fs = require ("fs");
 
-function createSharedObject (nameobject, obj, options, callback) {
+const defaultConfig = {
+	flLogToConsole: true
+	};
+
+function createSharedObject (nameobject, obj, myConfig, callback) {
 	var fname = nameobject + ".json";
 	var flchanged = false;
-	var theSharedObject;
-	if (options === undefined) { //options are optional ;-)
-		options = {
-			flLogToConsole: true
-			};
-		}
+	var theSharedObject = new Object ();
+	//set up theSharedObject
+		if (obj !== undefined) {
+			utils.copyScalars (obj, theSharedObject);
+			}
+	//set up config
+		var config = new Object ();
+		utils.copyScalars (defaultConfig, config);
+		if (myConfig !== undefined) { 
+			utils.copyScalars (myConfig, config);
+			}
 	function saveIfChanged () {
 		if (flchanged) {
 			flchanged = false;
 			fs.writeFile (fname, utils.jsonStringify (theSharedObject), function (err) {
-				if (options.flLogToConsole) {
+				if (config.flLogToConsole) {
 					console.log ("saved: fname == " + fname);
 					}
 				});
 			}
 		}
 	function set (obj, name, value) {
-		if (options.flLogToConsole) {
+		if (config.flLogToConsole) {
 			console.log ("name == " + name + ", value == " + value);
 			}
 		obj [name] = value;
 		flchanged = true;
-		theSharedObject = obj; 
 		}
 	fs.readFile (fname, function (err, data) {
 		if (!err) {
 			try {
 				var jstruct = JSON.parse (data);
 				for (var x in jstruct) {
-					obj [x] = jstruct [x];
+					theSharedObject [x] = jstruct [x];
 					}
 				}
 			catch (err) {
@@ -67,6 +75,6 @@ function createSharedObject (nameobject, obj, options, callback) {
 				}
 			}
 		setInterval (saveIfChanged, 1000);
-		callback (new Proxy (obj, {set}));
+		callback (new Proxy (theSharedObject, {set}));
 		});
 	}
