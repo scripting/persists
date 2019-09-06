@@ -6,7 +6,7 @@ Persistence for JavaScript objects in Node.
 
 Here's an app that adds one to a counter every second. If you stop it and restart, counter will start with its last value.
 
-<code>const persists = require ("persists");
+<pre>const persists = require ("persists");
 const inititalStats = {
 	counter: 0
 	};
@@ -15,7 +15,7 @@ persists ("stats", inititalStats, undefined, function (stats) {
 		stats.counter++;
 		}, 1000);
 	});
-</code>
+</pre>
 
 ### Changes
 
