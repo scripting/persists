@@ -8,11 +8,14 @@ Here's an app that adds one to a counter every second. If you stop it and restar
 
 ```
 
-const persists = require ("../persists.js");
-const inititalstats = {
+const persists = require ("persists");
+const inititalStats = {
 	counter: 0
 	};
-persists ("stats", inititalstats, undefined, function (stats) {
+const options = {
+	flLogToConsole: true
+	};
+persists ("stats", inititalStats, options, function (stats) {
 	setInterval (function () {
 		stats.counter++;
 		}, 1000);
