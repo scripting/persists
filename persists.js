@@ -40,6 +40,9 @@ function createSharedObject (nameobject, obj, options, callback) {
 		if (flchanged) {
 			flchanged = false;
 			fs.writeFile (fname, utils.jsonStringify (theSharedObject), function (err) {
+				if (options.flLogToConsole) {
+					console.log ("saved: fname == " + fname);
+					}
 				});
 			}
 		}
