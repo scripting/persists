@@ -16,7 +16,7 @@ for (var i = 0; i < 10; i++) {
 	persists ("obj" + i, inititalStats, config, function (stats) {
 		setInterval (function () {
 			stats.counter++;
-			stats.random = utils.random (0, i);
+			stats.random = utils.random (0, stats.mynum);
 			}, 1000);
 		});
 	}

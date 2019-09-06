@@ -33,7 +33,7 @@ I thought about allowing callbacks for saving and restoring, and might yet still
 
 It checks to see if the object changed once a second. 
 
-I wrote a test app, lotsofobjects.js, that makes sure each shared object is actually distinct from the others. This uncovered a flaw that when fixed made the internal code simpler.
+I wrote a test app, <a href="https://github.com/scripting/persists/blob/master/examples/lotsofobjects.js">lotsofobjects.js</a>, that makes sure each shared object is distinct from the others. This uncovered a flaw that when fixed made the <i>persists</i> code simpler.
 
 ### Changes
 
