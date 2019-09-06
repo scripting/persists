@@ -2,10 +2,7 @@ const persists = require ("persists");
 const inititalStats = {
 	counter: 0
 	};
-const options = {
-	flLogToConsole: true
-	};
-persists ("stats", inititalStats, options, function (stats) {
+persists ("stats", inititalStats, undefined, function (stats) {
 	setInterval (function () {
 		stats.counter++;
 		}, 1000);
