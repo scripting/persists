@@ -15,8 +15,6 @@ persists ("stats", inititalStats, undefined, function (stats) {
 	});
 </pre>
 
-### Narrative for the simple app
-
 The <i>persists</i> call creates a shared object we call stats. When we change a value in stats, it's automatically saved by the persist package. 
 
 The data is saved in a JSON file in the local directory. The name specified in the first parameter says what we will call the file, in this case stats.json, and it must be unique within that folder. 
