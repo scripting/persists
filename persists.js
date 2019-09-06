@@ -1,4 +1,4 @@
-var myProductName = "persists", myVersion = "0.4.3";  
+var myProductName = "persists", myVersion = "0.4.4";  
 
 /*  The MIT License (MIT)
 	Copyright (c) 2014-2019 Dave Winer
