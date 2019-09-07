@@ -4,13 +4,17 @@ Persistence for JavaScript objects in Node.
 
 ### A simple app
 
-<pre>const persists = require ("persists");
-const inititalStats = {
+<pre>const persists = require ("../persists.js");
+const initialStats = {
 	counter: 0
 	};
-persists ("stats", inititalStats, undefined, function (stats) {
+const config = {
+	flPersistsLog: false,
+	maxSecsBetwSaves: 3
+	};
+persists ("stats", initialStats, config, function (stats) {
 	setInterval (function () {
-		stats.counter++;
+		console.log (stats.counter++);
 		}, 1000);
 	});
 </pre>

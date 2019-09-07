@@ -3,17 +3,17 @@
 const persists = require ("../persists.js");
 const utils = require ("daveutils");
 
-const inititalStats = {
+const initialStats = {
 	mynum: 0,
 	counter: 0, 
 	random: 0
 	};
 const config = {
-	flLogToConsole: false
+	flPersistsLog: false
 	};
 for (var i = 0; i < 10; i++) {
-	inititalStats.mynum = i;
-	persists ("obj" + i, inititalStats, config, function (stats) {
+	initialStats.mynum = i;
+	persists ("obj" + i, initialStats, config, function (stats) {
 		setInterval (function () {
 			stats.counter++;
 			stats.random = utils.random (0, stats.mynum);

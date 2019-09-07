@@ -1,4 +1,4 @@
-var myProductName = "persists", myVersion = "0.4.4";  
+var myProductName = "persists", myVersion = "0.4.8";  
 
 /*  The MIT License (MIT)
 	Copyright (c) 2014-2019 Dave Winer
@@ -28,13 +28,15 @@ const utils = require ("daveutils");
 const fs = require ("fs");
 
 const defaultConfig = {
-	flLogToConsole: true
+	flPersistsLog: false,
+	persistsPath: "persists/sharedObjects/",
+	maxSecsBetwSaves: 1
 	};
 
 function createSharedObject (nameobject, obj, myConfig, callback) {
-	var fname = nameobject + ".json";
 	var flchanged = false;
 	var theSharedObject = new Object ();
+	var ctSecsSinceLastCheck = 0;
 	//set up theSharedObject
 		if (obj !== undefined) {
 			utils.copyScalars (obj, theSharedObject);
@@ -45,18 +47,25 @@ function createSharedObject (nameobject, obj, myConfig, callback) {
 		if (myConfig !== undefined) { 
 			utils.copyScalars (myConfig, config);
 			}
+		console.log ("persists: config == " + utils.jsonStringify (config));
+	var fname = config.persistsPath + nameobject + ".json";
 	function saveIfChanged () {
-		if (flchanged) {
-			flchanged = false;
-			fs.writeFile (fname, utils.jsonStringify (theSharedObject), function (err) {
-				if (config.flLogToConsole) {
-					console.log ("saved: fname == " + fname);
-					}
-				});
+		if (++ctSecsSinceLastCheck > config.maxSecsBetwSaves) {
+			ctSecsSinceLastCheck = 0;
+			if (flchanged) {
+				flchanged = false;
+				utils.sureFilePath (fname, function () {
+					fs.writeFile (fname, utils.jsonStringify (theSharedObject), function (err) {
+						if (config.flPersistsLog) {
+							console.log ("saved: fname == " + fname);
+							}
+						});
+					});
+				}
 			}
 		}
 	function set (obj, name, value) {
-		if (config.flLogToConsole) {
+		if (config.flPersistsLog) {
 			console.log ("name == " + name + ", value == " + value);
 			}
 		obj [name] = value;
