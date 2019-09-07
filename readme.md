@@ -79,6 +79,12 @@ I wrote a test app, <a href="https://github.com/scripting/persists/blob/master/e
 
 ### Changes
 
+#### 9/7/19 by DW
+
+New options: flPersistsLog, persistsPath, maxSecsBetwSaves.
+
+Reviewed demo code, simplified, corrected a spelling error.
+
 #### 9/6/19 by DW
 
 Don't need a <i>get</i> handler, removed it. 
