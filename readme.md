@@ -2,23 +2,27 @@
 
 Persistence for JavaScript objects in Node. 
 
-#### Why
+#### How to use
+
+<code>npm install persists</code>
+
+#### What is it for?
 
 I found I was creating the same code in every Node app I wrote. 
 
 * A global object called <i>stats</i> with properties like ctServerStarts, whenLastDayRollover, backupSerialNum. Sometimes even an array used to generate an RSS feed. 
 
-* Then there's a global flag called <i>flStatsChanged.</i> When you change one or more values in stats, set it true.
+* Then there's a global flag called <i>flStatsChanged.</i> When one or more values in stats changes, set flStatsChanged true.
 
-* When the program starts, you read the stats object from a file called stats.json.
+* When the program starts,  read the stats object from a file called stats.json.
 
-* Every second check if flStatsChanged is true, if so you set it false and write the JSONified object to stats.json. 
+* Every second check flStatsChanged, if so set it false and write the JSONified object to stats.json. 
 
 I wanted this to be a lot simpler. 
 
 * At startup, call a function that creates a shared object called stats. 
 
-* When I make a change to the object, <i>without calling a function</i> it detects the change, sets an internal flag to save the shared object at the top of the next second. 
+* When I make a change to the object, <i>without calling a function</i> it detects the change, sets an internal flag to save the shared object, which it does at the top of the next second. 
 
 * Once the shared object is created, as far as the app is concerned, stats is just a global variable.
 
