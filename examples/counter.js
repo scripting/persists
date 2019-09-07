@@ -1,12 +1,8 @@
-const persists = require ("../persists.js");
+const persists = require ("persists");
 const initialStats = {
 	counter: 0
 	};
-const config = {
-	flPersistsLog: false,
-	maxSecsBetwSaves: 3
-	};
-persists ("stats", initialStats, config, function (stats) {
+persists ("stats", initialStats, undefined, function (stats) {
 	setInterval (function () {
 		console.log (stats.counter++);
 		}, 1000);

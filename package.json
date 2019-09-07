@@ -1,6 +1,6 @@
 {
 	"name": "persists",
-	"description": "Persistence for JavaScript objects, using a folder as storage between runs of a client app.",
+	"description": "Persistence for JavaScript objects, using a folder as storage, using JavaScript syntax.",
 	"author": "Dave Winer <dave@scripting.com>",
 	"license": "MIT",
 	"main": "persists.js",
