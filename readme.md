@@ -69,9 +69,11 @@ These are the possible values that configure persists via the third parameter.
 
 * maxSecsBetwSaves -- how often to check for changes, default 1
 
-### A more complex test app
+### More complex test apps
 
-I wrote a test app, <a href="https://github.com/scripting/persists/blob/master/examples/lotsofobjects.js">lotsofobjects.js</a>, that makes sure each shared object is distinct from the others. This uncovered a flaw that when fixed made the <i>persists</i> code simpler.
+1. I wrote a test app, <a href="https://github.com/scripting/persists/blob/master/examples/lotsofobjects.js">lotsofobjects.js</a>, that makes sure each shared object is distinct from the others. This uncovered a flaw that when fixed made the <i>persists</i> code simpler.
+
+2. As part of the XML-RPC-in-JavaScript project, here's an <a href="https://github.com/scripting/xml-rpc/blob/master/examples/mailservice/mailservice.js">email gateway app</a>. It uses persists to keep track of a serial number. 
 
 ### Notes
 
