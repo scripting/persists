@@ -1,6 +1,6 @@
 //a test that creates a bunch of shared objects and then changes them every second.
 
-const persists = require ("../persists.js");
+const persists = require ("persists");
 const utils = require ("daveutils");
 
 const initialStats = {
