@@ -32,7 +32,7 @@ Why is this possible now?
 
 ### A simple app
 
-<pre>const persists = require ("persists");
+<pre>const persists = require ("../persists.js");
 const initialStats = {
 	counter: 0
 	};
@@ -80,6 +80,22 @@ These are the possible values that configure persists via the third parameter.
 1. I thought about allowing callbacks for saving and restoring, and might yet still do it. It seemed like something to think about after a while, see how much use this gets, and what kinds of apps might be possible.
 
 ### Changes
+
+#### 9/8/19 by DW
+
+Change in the format that shared objects are saved on disk.
+
+There's no reason we can't include metadata, when created, number of saves, when last saved, a version number.
+
+The JSON file will now have several top-level properties.
+
+1. version -- a string, so the format can easily change in the future. 
+
+2. meta -- information about the file
+
+3. data -- the JSONified object.
+
+Here's an <a href="https://gist.github.com/scripting/e22acccb9f5239b1e2bde64e6e25a275">example</a> of a saved object from the lotsofobjects demo.
 
 #### 9/7/19 by DW
 

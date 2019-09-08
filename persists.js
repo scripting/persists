@@ -1,4 +1,4 @@
-var myProductName = "persists", myVersion = "0.4.9";  
+var myProductName = "persists", myVersion = "0.4.10";  
 
 /*  The MIT License (MIT)
 	Copyright (c) 2014-2019 Dave Winer
@@ -32,15 +32,27 @@ const defaultConfig = {
 	persistsPath: "persists/sharedObjects/",
 	maxSecsBetwSaves: 1
 	};
+const defaultObjectMetadata = { //the metadata stored with each JSONified object
+	ctSaves: 0,
+	whenLastSave: undefined,
+	whenCreated: new Date ()
+	};
+const currentSavedObjectVersion = 1;
 
-function createSharedObject (nameobject, obj, myConfig, callback) {
+function nowString () {
+	return (new Date ().toLocaleString ());
+	}
+function createSharedObject (nameobject, initialObjectValues, myConfig, callback) {
 	var flchanged = false;
-	var theSharedObject = new Object ();
+	var theSharedObject = new Object (), objMetadata = new Object ();
 	var ctSecsSinceLastCheck = 0;
 	//set up theSharedObject
-		if (obj !== undefined) {
-			utils.copyScalars (obj, theSharedObject);
+		if (initialObjectValues !== undefined) {
+			utils.copyScalars (initialObjectValues, theSharedObject);
 			}
+	//set up objMetadata
+		utils.copyScalars (defaultObjectMetadata, objMetadata);
+		objMetadata.whenCreated = nowString ();
 	//set up config
 		var config = new Object ();
 		utils.copyScalars (defaultConfig, config);
@@ -48,19 +60,61 @@ function createSharedObject (nameobject, obj, myConfig, callback) {
 			utils.copyScalars (myConfig, config);
 			}
 		console.log ("persists: config == " + utils.jsonStringify (config));
-	var fname = config.persistsPath + nameobject + ".json";
+	var f = config.persistsPath + nameobject + ".json";
+	
+	function readObject (f, callback) {
+		fs.readFile (f, function (err, data) {
+			if (!err) {
+				try {
+					var jstruct = JSON.parse (data);
+					switch (jstruct.version) {
+						case undefined: //a file from before we had versions -- 9/8/19 by DW
+							for (var x in jstruct) {
+								theSharedObject [x] = jstruct [x];
+								}
+							break;
+						case 1:
+							for (var x in jstruct.data) {
+								theSharedObject [x] = jstruct.data [x];
+								}
+							for (var x in jstruct.metadata) {
+								objMetadata [x] = jstruct.metadata [x];
+								}
+							break;
+						}
+					}
+				catch (err) {
+					console.log (err.message);
+					}
+				}
+			callback ();
+			});
+		}
+	function saveObject (f, callback) {
+		objMetadata.ctSaves++;
+		objMetadata.whenLastSave = nowString ();
+		utils.sureFilePath (f, function () {
+			var jstruct = {
+				version: currentSavedObjectVersion,
+				metadata: objMetadata,
+				data: theSharedObject
+				};
+			fs.writeFile (f, utils.jsonStringify (jstruct), function (err) {
+				if (config.flPersistsLog) {
+					console.log ("saved: f == " + f);
+					}
+				if (callback !== undefined) {
+					callback (err);
+					}
+				});
+			});
+		}
 	function saveIfChanged () {
 		if (++ctSecsSinceLastCheck > config.maxSecsBetwSaves) {
 			ctSecsSinceLastCheck = 0;
 			if (flchanged) {
 				flchanged = false;
-				utils.sureFilePath (fname, function () {
-					fs.writeFile (fname, utils.jsonStringify (theSharedObject), function (err) {
-						if (config.flPersistsLog) {
-							console.log ("saved: fname == " + fname);
-							}
-						});
-					});
+				saveObject (f);
 				}
 			}
 		}
@@ -71,18 +125,7 @@ function createSharedObject (nameobject, obj, myConfig, callback) {
 		obj [name] = value;
 		flchanged = true;
 		}
-	fs.readFile (fname, function (err, data) {
-		if (!err) {
-			try {
-				var jstruct = JSON.parse (data);
-				for (var x in jstruct) {
-					theSharedObject [x] = jstruct [x];
-					}
-				}
-			catch (err) {
-				console.log (err.message);
-				}
-			}
+	readObject (f, function () {
 		setInterval (saveIfChanged, 1000);
 		callback (new Proxy (theSharedObject, {set}));
 		});
