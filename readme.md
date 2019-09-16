@@ -32,13 +32,13 @@ Why is this possible now?
 
 ### A simple app
 
-<pre>const persists = require ("../persists.js");
-const initialStats = {
+<pre>const persists = require ("persists");
+const inititalStats = {
 	counter: 0
 	};
-persists ("stats", initialStats, undefined, function (stats) {
+persists ("stats", inititalStats, undefined, function (stats) {
 	setInterval (function () {
-		console.log (stats.counter++);
+		stats.counter++;
 		}, 1000);
 	});
 </pre>
@@ -80,6 +80,10 @@ These are the possible values that configure persists via the third parameter.
 1. I thought about allowing callbacks for saving and restoring, and might yet still do it. It seemed like something to think about after a while, see how much use this gets, and what kinds of apps might be possible.
 
 ### Changes
+
+#### 9/14/19 by DW
+
+When we copy from the xxx struct into the sharedObject, we only were copying scalars. Changed it so it copies objects and arrays too.
 
 #### 9/8/19 by DW
 

@@ -1,4 +1,4 @@
-var myProductName = "persists", myVersion = "0.4.10";  
+var myProductName = "persists", myVersion = "0.4.11";  
 
 /*  The MIT License (MIT)
 	Copyright (c) 2014-2019 Dave Winer
@@ -42,22 +42,27 @@ const currentSavedObjectVersion = 1;
 function nowString () {
 	return (new Date ().toLocaleString ());
 	}
+function copyObject (source, dest) { //9/15/19 by DW
+	for (var x in source) {
+		dest [x] = source [x];
+		}
+	}
 function createSharedObject (nameobject, initialObjectValues, myConfig, callback) {
 	var flchanged = false;
 	var theSharedObject = new Object (), objMetadata = new Object ();
 	var ctSecsSinceLastCheck = 0;
 	//set up theSharedObject
 		if (initialObjectValues !== undefined) {
-			utils.copyScalars (initialObjectValues, theSharedObject);
+			copyObject (initialObjectValues, theSharedObject);
 			}
 	//set up objMetadata
-		utils.copyScalars (defaultObjectMetadata, objMetadata);
+		copyObject (defaultObjectMetadata, objMetadata);
 		objMetadata.whenCreated = nowString ();
 	//set up config
 		var config = new Object ();
-		utils.copyScalars (defaultConfig, config);
+		copyObject (defaultConfig, config);
 		if (myConfig !== undefined) { 
-			utils.copyScalars (myConfig, config);
+			copyObject (myConfig, config);
 			}
 		console.log ("persists: config == " + utils.jsonStringify (config));
 	var f = config.persistsPath + nameobject + ".json";
